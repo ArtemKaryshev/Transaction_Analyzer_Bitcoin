@@ -4,7 +4,12 @@ Bitcoin Privacy Analyzer — инструмент для анализа конф
 Проект разработан как исследовательский инструмент для анализа приватности транзакций и демонстрации эвристик, используемых в blockchain-аналитике.
 
 Установка:
+
 git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
+
 cd bitcoin-privacy-analyzer
+
 pip install -r requirements.txt
+
 streamlit run main.py
+
