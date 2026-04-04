@@ -67,7 +67,7 @@ def analyze(tx: dict):
     if num_outputs == 1:
         change_risk = 0
     elif same_addr == 1:
-        change_risk = 0.99
+        change_risk = 1
     elif same_addr > 1:
         change_risk = 0.50
     elif num_inputs == 1 and num_outputs == 2 and same_addr == 0:
