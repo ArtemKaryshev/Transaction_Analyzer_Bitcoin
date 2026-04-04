@@ -13,11 +13,12 @@ Privacy Score
 Граф транзакции
 
 Установка
-  git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
-  cd bitcoin-privacy-analyzer
-  pip install -r requirements.txt
+git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
+cd bitcoin-privacy-analyzer
+pip install -r requirements.txt
+
 Запуск
-  streamlit run main.py
+streamlit run main.py
 
 Примеры транзакций
 
