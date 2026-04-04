@@ -3,7 +3,7 @@
 import streamlit as st
 from api import get_tx
 from analyzer import analyze
-from visualizer import show_addresses, show_results, show_tx_graph
+from visualizer import show_addresses, show_results, show_tx_graph, show_recommendations
 
 st.set_page_config(
     page_title="Bitcoin Privacy Analyzer",
@@ -40,6 +40,9 @@ if st.button("Анализировать", type="primary"):
             result = analyze(tx)
 
             show_results(result)
+            st.markdown("---")
+
+            show_recommendations(result)
             st.markdown("---")
 
             show_addresses(result)

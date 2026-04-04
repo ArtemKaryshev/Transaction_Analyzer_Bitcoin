@@ -218,3 +218,49 @@ def show_tx_graph(r, txid: str):
     plt.close(fig)
     buf.seek(0)
     st.image(buf, caption="Граф транзакции", use_container_width=True)
+
+
+def get_recommendations(r):
+    tips = []
+
+    if r.change == 0.99:
+        tips.append(
+            "❗Address Reuse: адрес сдачи совпадает с входным. "
+            "Используйте новый адрес для каждой транзакции."
+        )
+
+    if r.change >= 0.75 and r.round_risk > 0:
+        tips.append(
+            "❗Round Number: сумма платежа круглая - сдача легко вычисляется. "
+            "Разбейте платёж на несколько транзакций с некруглыми суммами."
+        )
+
+    if r.cio >= 0.5:
+        tips.append(
+            "❗CIO: несколько входных адресов из одного кошелька раскрывают "
+            "ваш баланс. Используйте CoinJoin перед консолидацией UTXO."
+        )
+
+    if r.coinjoin < 0.3 and r.anon_set == 1:
+        tips.append(
+            "❗Anonymity Set = 1: получатель определяется однозначно. "
+            "Используйте CoinJoin (Wasabi Wallet, JoinMarket) - это повысит "
+            "Anonymity Set и скроет реального получателя."
+        )
+
+    if r.entropy < 0.5 and r.num_outputs >= 2:
+        tips.append(
+            "❗Низкая энтропия выходов: суммы сильно различаются, "
+            "платёж очевиден. Рассмотрите Lightning Network для небольших платежей."
+        )
+
+    if not tips or r.score >= 80:
+        tips = ["✅Транзакция не содержит явных признаков деанонимизации."]
+
+    return tips
+
+def show_recommendations(r):
+    tips = get_recommendations(r)
+    st.markdown("Рекомендации по повышению конфиденциальности")
+    for tip in tips:
+        st.warning(tip) if tip.startswith("❗") else st.info(tip)
