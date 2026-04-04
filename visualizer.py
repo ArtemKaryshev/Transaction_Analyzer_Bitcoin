@@ -170,16 +170,17 @@ def show_tx_graph(r, txid: str):
     for i, node in enumerate(in_nodes):
         pos[node] = (-2, (i - (n_in - 1) / 2) * 1.2)
     pos[tx_node] = (0, 0)
-    n_out = len(out_nodes)
-    for i, node in enumerate(out_nodes):
-        pos[node] = (2, (i - (n_out - 1) / 2) * 1.2)
+    unique_out_nodes = [n for n in out_nodes if n not in pos]
+    n_unique_out = len(unique_out_nodes)
+    for i, node in enumerate(unique_out_nodes):
+        pos[node] = (2, (i - (n_unique_out - 1) / 2) * 1.2)
 
     node_colors = [G.nodes[n].get("color", "#90a4ae") for n in G.nodes]
     edge_labels = {
         (u, v): f"{d['weight']:.4f} BTC" for u, v, d in G.edges(data=True)
     }
 
-    fig, ax = plt.subplots(figsize=(14, max(4, max(n_in, n_out) * 1.4)))
+    fig, ax = plt.subplots(figsize=(14, max(4, max(n_in, n_unique_out) * 1.4)))
     fig.patch.set_facecolor("#1a1a2e")
     ax.set_facecolor("#1a1a2e")
 
@@ -187,7 +188,7 @@ def show_tx_graph(r, txid: str):
                            node_size=1800, alpha=0.95)
     nx.draw_networkx_edges(G, pos, ax=ax, edge_color="#cfd8dc",
                            arrows=True, arrowsize=20, width=1.5,
-                           connectionstyle="arc3,rad=05")
+                           connectionstyle="arc3,rad=0.05")
 
 
     labels_wrapped = {n: "\n".join(textwrap.wrap(n, 14)) for n in G.nodes}
