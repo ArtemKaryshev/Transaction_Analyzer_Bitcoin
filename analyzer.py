@@ -61,6 +61,7 @@ def analyze(tx: dict):
 # Round number
     round_outputs = sum(1 for v in output_values if v > 0 and v % 100000 == 0)
     round_risk = round(round_outputs / max(num_outputs, 1), 3)
+    round_risk = 1 if round_risk == 1.0 else round_risk
 
 # Change Detection
     same_addr = sum(1 for out in outputs if out.get("addr", "") in input_addr_set)
