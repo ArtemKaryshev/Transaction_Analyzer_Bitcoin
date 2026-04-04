@@ -5,7 +5,7 @@ Bitcoin Privacy Analyzer — инструмент для анализа конф
 
 Установка:
 
-git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
+git clone https://github.com/ArtemKaryshev/Transaction_Analyzer_Bitcoin.git
 
 cd bitcoin-privacy-analyzer
 
