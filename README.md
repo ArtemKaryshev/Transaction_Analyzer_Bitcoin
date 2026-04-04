@@ -3,58 +3,8 @@ Bitcoin Privacy Analyzer — инструмент для анализа конф
 
 Проект разработан как исследовательский инструмент для анализа приватности транзакций и демонстрации эвристик, используемых в blockchain-аналитике.
 
-Приложение отображает:
-
-Общую сумму транзакции
-Privacy Score
-Метрики конфиденциальности
-Список входов и выходов
-Предполагаемую сдачу
-Граф транзакции
-
-Установка
+Установка:
 git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
 cd bitcoin-privacy-analyzer
 pip install -r requirements.txt
-
-Запуск
 streamlit run main.py
-
-Примеры транзакций
-
-Сатоши — Хэл Финни:
-
-f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
-
-CoinJoin транзакция:
-
-eb5c93b28dc9a87ba22020593e1b008bfae6b5a0fcba9b4d1ed5b456b8129e9c
-Используемые технологии
-Python
-Streamlit
-NetworkX
-Plotly
-Matplotlib
-Blockchain.info API
-Научная база
-
-Проект основан на исследованиях:
-
-Meiklejohn et al. — A Fistful of Bitcoins
-CoinJoin heuristics
-Исследования конфиденциальности Bitcoin
-Ограничения
-
-Инструмент использует эвристики и:
-
-не гарантирует 100% точность
-не заменяет полноценный blockchain-анализ
-предназначен для исследований и обучения
-Цель проекта
-
-Создать простой инструмент для:
-
-анализа приватности транзакций Bitcoin
-исследования CoinJoin
-изучения эвристик blockchain-анализа
-обучения анализу транзакций
