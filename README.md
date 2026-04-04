@@ -11,21 +11,14 @@ Privacy Score
 Список входов и выходов
 Предполагаемую сдачу
 Граф транзакции
-Структура проекта
-bitcoin-privacy-analyzer/
-│
-├── main.py          # Главный модуль Streamlit
-├── analyzer.py      # Анализ транзакций
-├── api.py           # Получение данных blockchain
-├── visualizer.py    # Визуализация и графики
-│
-└── README.md
+
 Установка
-git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
-cd bitcoin-privacy-analyzer
-pip install -r requirements.txt
+  git clone https://github.com/yourusername/bitcoin-privacy-analyzer.git
+  cd bitcoin-privacy-analyzer
+  pip install -r requirements.txt
 Запуск
-streamlit run main.py
+  streamlit run main.py
+
 Примеры транзакций
 
 Сатоши — Хэл Финни:
