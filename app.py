@@ -1,9 +1,15 @@
 '''Главный модуль запуска программы'''
 
 import streamlit as st
-from api import get_tx
+from api import get_tx, get_address_txs
 from analyzer import analyze
-from visualizer import show_addresses, show_results, show_tx_graph, show_recommendations
+from visualizer import (
+    show_addresses,
+    show_results,
+    show_tx_graph,
+    show_recommendations,
+    show_address_transactions,
+)
 
 st.set_page_config(
     page_title="Bitcoin Privacy Analyzer",
@@ -11,11 +17,45 @@ st.set_page_config(
     layout="centered",
 )
 
+# Инициализация session_state
+
+if "txid_input" not in st.session_state:
+    st.session_state["txid_input"] = ""
+if "selected_addr" not in st.session_state:
+    st.session_state["selected_addr"] = None
+if "back_txid" not in st.session_state:
+    st.session_state["back_txid"] = ""
+
+if st.session_state["selected_addr"]:
+    st.title("Bitcoin Privacy Analyzer")
+    st.caption("Оценка конфиденциальности транзакций в сети Bitcoin")
+    st.markdown("---")
+
+    address = st.session_state["selected_addr"]
+    with st.spinner(f"Загружаем транзакции для {address[:20]}…"):
+        addr_data = get_address_txs(address)
+
+    if addr_data is None:
+        # Ошибка сети — показываем кнопку возврата
+        if st.button("← Назад"):
+            st.session_state["selected_addr"] = None
+            st.rerun()
+    else:
+        show_address_transactions(address, addr_data)
+    st.stop()
+
+
+# Страница с вводом TXID и анализом транзакции
+
 st.title("Bitcoin Privacy Analyzer")
 st.caption("Оценка конфиденциальности транзакций в сети Bitcoin")
 
 
-txid = st.text_input("TXID транзакции (64 символа)")
+txid = st.text_input(
+    "TXID транзакции (64 символа)",
+    value=st.session_state["txid_input"],
+    key="txid_input",
+)
 
 st.caption("Примеры для проверки:")
 col_ex1, col_ex2 = st.columns(2)
@@ -27,14 +67,24 @@ with col_ex2:
     st.code("eb5c93b28dc9a87ba22020593e1b008bfae6b5a0fcba9b4d1ed5b456b8129e9c")
 
 
-if st.button("Анализировать", type="primary"):
-    if not txid:
+_auto_run = (
+    st.session_state["txid_input"] != ""
+    and len(st.session_state["txid_input"].strip()) == 64
+    and st.session_state.get("back_txid") == ""
+)
+
+if st.button("Анализировать", type="primary") or _auto_run:
+    current_txid = st.session_state["txid_input"].strip()
+    if not current_txid:
         st.warning("Введите TXID")
-    elif len(txid.strip()) != 64:
+    elif len(current_txid) != 64:
         st.error("TXID должен содержать ровно 64 символа")
     else:
+        st.session_state["selected_addr"] = None
+        st.session_state["back_txid"] = ""
+
         with st.spinner("Запрашиваем blockchain.info…"):
-            tx = get_tx(txid.strip())
+            tx = get_tx(current_txid)
 
         if tx is not None:
             result = analyze(tx)
@@ -49,7 +99,7 @@ if st.button("Анализировать", type="primary"):
             st.markdown("---")
 
             with st.expander("Граф транзакции", expanded=True):
-                show_tx_graph(result, txid.strip())
+                show_tx_graph(result, current_txid)
 
             with st.expander("Пояснения метрик"):
                 st.markdown(f"""
