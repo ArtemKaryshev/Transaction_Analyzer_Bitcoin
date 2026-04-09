@@ -208,6 +208,19 @@ def show_address_transactions(address: str, addr_data: dict):
 
     # Список транзакций
     for tx in txs:
+        is_sender = False
+        for inp in tx.get("inputs", []):
+            prev_out = inp.get("prev_out")
+            if prev_out and prev_out.get("addr") == address:
+                is_sender = True
+                break
+
+        is_receiver = False
+        for out_item in tx.get("out", []):
+            if out_item.get("addr") == address:
+                is_receiver = True
+                break
+
         txid = tx.get("hash", "")
         block_height = tx.get("block_height")
         block_label = f"Блок {block_height}" if block_height else "Не подтверждена"
@@ -215,12 +228,20 @@ def show_address_transactions(address: str, addr_data: dict):
         num_inputs = len(tx.get("inputs", []))
         num_outputs = len(tx.get("out", []))
 
+        if is_sender:
+            bg_color = "#feffbe"
+            role_text = "Отправка"
+        elif is_receiver:
+            bg_color = "#e0ffb5"
+            role_text = "Получение"
+
+
         st.markdown(
-            f"""<div style="background:#fafafa;border:1px solid #e0e0e0;
+            f"""<div style="background:{bg_color};border:1px solid #e0e0e0;
             border-radius:8px;padding:10px 14px;margin-bottom:4px">
             <div style="display:flex;justify-content:space-between;
                         align-items:center;flex-wrap:wrap">
-              <span style="font-size:0.78rem;color:#888">{block_label}</span>
+              <span style="font-size:0.78rem;color:#888">{block_label} · {role_text}</span>
               <span style="font-size:0.82rem;color:#333;font-weight:600">
                 {total_out_btc:.6f} BTC
               </span>
@@ -231,6 +252,7 @@ def show_address_transactions(address: str, addr_data: dict):
             </div>""",
             unsafe_allow_html=True,
         )
+
         short_txid = f"{txid[:20]}…{txid[-8:]}"
         if st.button(
             f"Анализировать: {short_txid}",
@@ -238,12 +260,11 @@ def show_address_transactions(address: str, addr_data: dict):
             help=f"TXID: {txid}",
             use_container_width=True,
         ):
-            # Переключаемся на анализ выбранной транзакции
             st.session_state["txid_input"] = txid
             st.session_state["selected_addr"] = None
             st.session_state["back_txid"] = ""
             st.rerun()
-
+    
 
 def show_tx_graph(r, txid: str):
     G = nx.DiGraph()
