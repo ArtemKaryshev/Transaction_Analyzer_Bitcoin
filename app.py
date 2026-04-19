@@ -70,8 +70,11 @@ with col_ex2:
 _auto_run = (
     st.session_state["txid_input"] != ""
     and len(st.session_state["txid_input"].strip()) == 64
-    and st.session_state.get("back_txid") == ""
+    and (st.session_state.get("back_txid") == "" or st.session_state.get("auto_analyze", True))
 )
+
+if st.session_state.get("auto_analyze", False):
+    st.session_state["auto_analyze"] = False
 
 if st.button("Анализировать", type="primary") or _auto_run:
     current_txid = st.session_state["txid_input"].strip()
@@ -82,25 +85,18 @@ if st.button("Анализировать", type="primary") or _auto_run:
     else:
         st.session_state["selected_addr"] = None
         st.session_state["back_txid"] = ""
-
         with st.spinner("Запрашиваем blockchain.info…"):
             tx = get_tx(current_txid)
-
         if tx is not None:
             result = analyze(tx)
-
             show_results(result)
             st.markdown("---")
-
             show_recommendations(result)
             st.markdown("---")
-
             show_addresses(result)
             st.markdown("---")
-
             with st.expander("Граф транзакции", expanded=True):
                 show_tx_graph(result, current_txid)
-
             with st.expander("Пояснения метрик"):
                 st.markdown(f"""
 | Метрика | Значение | Пояснение |

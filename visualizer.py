@@ -172,11 +172,12 @@ def show_address_transactions(address: str, addr_data: dict):
     # Кнопка Назад
     back_txid = st.session_state.get("back_txid", "")
     back_label = f"Назад к транзакции {back_txid[:16]}…" if back_txid else "Назад"
-    if st.button(back_label, key="btn_back_to_tx"):
+    if st.button(back_label, key=f"back_to_tx_{back_txid[:16]}"):
         st.session_state["selected_addr"] = None
-        # txid_input уже содержит нужное значение — просто rerun
+        st.session_state["txid_input"] = back_txid
+        st.session_state["auto_analyze"] = True
         st.rerun()
-
+        
     # Заголовок панели адреса
     st.markdown(
         f"""<div style="background:#f3e5f5;border-left:4px solid #9c27b0;
