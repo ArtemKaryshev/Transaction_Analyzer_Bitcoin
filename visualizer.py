@@ -299,26 +299,26 @@ def show_tx_graph(r, txid: str):
     for i, node in enumerate(unique_out_nodes):
         pos[node] = (2, (i - (n_unique_out - 1) / 2) * 1.2)
 
-    node_colors = [G.nodes[n].get("color", "#90a4ae") for n in G.nodes]
+    node_colors = [G.nodes[n].get("color", "#202020") for n in G.nodes]
     edge_labels = {
         (u, v): f"{d['weight']:.4f} BTC" for u, v, d in G.edges(data=True)
     }
 
     fig, ax = plt.subplots(figsize=(14, max(4, max(n_in, n_unique_out) * 1.4)))
-    fig.patch.set_facecolor("#1a1a2e")
-    ax.set_facecolor("#1a1a2e")
+    fig.patch.set_facecolor("#f8f8f8")
+    ax.set_facecolor("#f8f8f8")
 
     nx.draw_networkx_nodes(G, pos, ax=ax, node_color=node_colors,
                            node_size=1800, alpha=0.95)
-    nx.draw_networkx_edges(G, pos, ax=ax, edge_color="#cfd8dc",
+    nx.draw_networkx_edges(G, pos, ax=ax, edge_color="#202020",
                            arrows=True, arrowsize=20, width=1.5,
                            connectionstyle="arc3,rad=0.05")
 
     labels_wrapped = {n: "\n".join(textwrap.wrap(n, 14)) for n in G.nodes}
     nx.draw_networkx_labels(G, pos, labels=labels_wrapped, ax=ax,
-                            font_size=6.5, font_color="white", font_weight="bold")
+                            font_size=6.5, font_color="black", font_weight="bold")
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, ax=ax,
-                                 font_size=6.5, font_color="#eceff1",
+                                 font_size=6.5, font_color="#202020",
                                  bbox=dict(alpha=0))
 
     legend_items = [
@@ -331,7 +331,7 @@ def show_tx_graph(r, txid: str):
               facecolor="#1a1a2e", labelcolor="white", fontsize=8)
     ax.axis("off")
     ax.set_title(f"Граф транзакции {txid[:16]}",
-                 color="white", fontsize=11, pad=10)
+                 color="black", fontsize=11, pad=10)
 
     plt.tight_layout()
     buf = io.BytesIO()
