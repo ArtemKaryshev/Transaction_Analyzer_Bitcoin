@@ -39,7 +39,7 @@ def show_results(r):
     )
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Privacy Score", f"{r.score} / 100")
+    c1.metric("Оценка конфиденциальности", f"{r.score} / 100")
     c2.metric("Входов / Выходов", f"{r.num_inputs} / {r.num_outputs}")
     c3.metric("Anonymity Set", r.anon_set)
     c4.metric("Размер TX", f"{r.size_bytes} байт")
@@ -48,7 +48,7 @@ def show_results(r):
         go.Indicator(
             mode="gauge+number",
             value=r.score,
-            title={"text": "Privacy Score"},
+            title={"text": "Оценка конфиденциальности"},
             gauge={
                 "axis": {"range": [0, 100]},
                 "bar": {"color": _score_color(r.score)},

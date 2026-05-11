@@ -110,7 +110,7 @@ def analyze(tx: dict):
         raw_entropy = -sum(p * math.log2(p) for p in probs)
         entropy = round(raw_entropy / math.log2(len(output_values)), 3)
 
-# Privacy Score
+# Оценка конфиденциальности
     score = 30
     score += coinjoin_prob * 45
     score += entropy * 15
