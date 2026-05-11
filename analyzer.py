@@ -57,6 +57,8 @@ def analyze(tx: dict):
         uniq_percent = unique_input_addrs / num_inputs
         scale = math.log2(unique_input_addrs + 1) / math.log2(10)
         cio_risk = round(min(uniq_percent * scale * 1.5, 1), 3)
+    if num_outputs == 1 and num_inputs >= 3:
+        cio_risk = max(cio_risk, 0.5)
 
 # Round number
     round_outputs = sum(1 for v in output_values if v > 0 and v % 100000 == 0)
